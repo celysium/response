@@ -1,0 +1,43 @@
+{
+    "name": "celysium/responser",
+    "description": "Library for universal json responses.",
+    "keywords": [
+        "Laravel",
+        "Response",
+        "Json"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Celysium\\Responser\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ehsan Tavakoli",
+            "email": "ehsantavakoli1995@gmail.com"
+        },
+        {
+            "name" : "Nasser Hekmati",
+            "email" : "hekmati.nasser@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.0.2",
+        "illuminate/http": "^9.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Celysium\\Responser\\ResponserServiceProvider"
+            ],
+            "aliases": {
+                "Responser": "Celysium\\Responser\\Facades\\Responser"
+            }
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^7.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
