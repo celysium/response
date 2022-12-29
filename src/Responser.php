@@ -8,7 +8,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Response;
-use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response as ResponseClass;
 
 class Responser
@@ -346,7 +345,7 @@ class Responser
         }
         elseif ($data instanceof ResourceCollection) {
             $meta = static::simpleMeta($data->resource->toArray());
-            $data = Arr::only($data->resource->toArray(), ['data']);
+            $data = $data->collection;
         }
         elseif ($data instanceof LengthAwarePaginator) {
             $meta = static::simpleMeta($data->toArray());
