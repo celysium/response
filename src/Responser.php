@@ -87,7 +87,7 @@ class Responser
         return static::success(
             $data,
             $messages,
-            ResponseClass::HTTP_NO_CONTENT,
+            ResponseClass::HTTP_OK,
             $meta
         );
     }
