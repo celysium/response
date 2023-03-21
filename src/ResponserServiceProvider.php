@@ -11,10 +11,6 @@ class ResponserServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadTranslationsFrom(__DIR__ . '/../lang', 'responser');
-        $this->app->bind(
-            ExceptionHandler::class,
-            Handler::class
-        );
     }
 
     public function register()
