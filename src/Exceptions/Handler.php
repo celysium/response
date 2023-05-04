@@ -21,7 +21,7 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->renderable(function (AuthorizationException $exception) {
-            return Responser::unauthorized();
+            return Responser::forbidden();
         });
 
         $this->renderable(function (AccessDeniedHttpException $exception) {
@@ -29,7 +29,7 @@ class Handler extends ExceptionHandler
         });
 
         $this->renderable(function (AuthenticationException $exception) {
-            return Responser::forbidden();
+            return Responser::unauthorized();
         });
 
         $this->renderable(function (ModelNotFoundException $exception) {
