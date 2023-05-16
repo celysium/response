@@ -9,6 +9,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -65,5 +66,23 @@ class Handler extends ExceptionHandler
         $this->renderable(function (Exception $exception) {
             return Responser::serverError();
         });
+    }
+    /**
+     * Get the default context variables for logging.
+     *
+     * @return array
+     */
+    protected function context(): array
+    {
+        $request = app('request');
+        $data = [
+            'uri' => $request->route()->uri,
+            'method' => $request->method(),
+            'query' => $request->query(),
+            'headers' => $request->header(),
+            'parameters' => Arr::except($request->all(), array_keys($request->query())),
+            'fired_at' => now()->toString()
+        ];
+        return array_merge(['request' => json_encode($data, JSON_PRETTY_PRINT)], parent::context());
     }
 }
