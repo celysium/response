@@ -3,6 +3,7 @@
 namespace Celysium\Responser\Exceptions;
 
 use Carbon\Exceptions\BadMethodCallException;
+use Celysium\Responser\Responser;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -14,13 +15,15 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Celysium\Responser\Responser;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class Handler extends ExceptionHandler
 {
     public function register()
     {
+        if (env('APP_DEBUG')) {
+            return;
+        }
         $this->renderable(function (AuthorizationException $exception) {
             return Responser::forbidden();
         });
@@ -67,6 +70,7 @@ class Handler extends ExceptionHandler
             return Responser::serverError();
         });
     }
+
     /**
      * Get the default context variables for logging.
      *
@@ -76,9 +80,9 @@ class Handler extends ExceptionHandler
     {
         /** @var Request|null $request */
         $request = app('request');
-        if($request) {
+        if ($request) {
             $data = [
-                'path'        => $request->path(),
+                'path'       => $request->path(),
                 'method'     => $request->method(),
                 'parameters' => $request->all(),
                 'headers'    => $request->header(),
