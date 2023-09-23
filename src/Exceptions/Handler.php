@@ -21,7 +21,7 @@ class Handler extends ExceptionHandler
 {
     public function register()
     {
-        if (env('APP_DEBUG') ||  ! (request()->ajax() && request()->isJson())) {
+        if (env('APP_DEBUG') ||  ! (request()->ajax() || request()->isJson())) {
             return;
         }
         $this->renderable(function (AuthorizationException $exception) {
