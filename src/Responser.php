@@ -62,7 +62,7 @@ class Responser
     {
         if (count($messages) == 0) {
             $messages[] = [
-                'type' => 'info',
+                'type' => 'success',
                 'text' => __('responser::response.created')
             ];
         }
