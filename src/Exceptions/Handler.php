@@ -21,7 +21,7 @@ class Handler extends ExceptionHandler
 {
     public function register()
     {
-        if (env('APP_DEBUG')) {
+        if (env('RESPONSER_JSON')) {
             return;
         }
         $this->renderable(function (AuthorizationException $exception) {
