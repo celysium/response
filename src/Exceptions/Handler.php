@@ -1,9 +1,9 @@
 <?php
 
-namespace Celysium\Responser\Exceptions;
+namespace Celysium\Response\Exceptions;
 
 use Carbon\Exceptions\BadMethodCallException;
-use Celysium\Responser\Responser;
+use Celysium\Response\Response;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -21,53 +22,53 @@ class Handler extends ExceptionHandler
 {
     public function register()
     {
-        if (env('RESPONSER_JSON')) {
+        if (!env('RESPONSE_EXCEPTION_HANDLER')) {
             return;
         }
         $this->renderable(function (AuthorizationException $exception) {
-            return Responser::forbidden();
+            return Response::forbidden();
         });
 
         $this->renderable(function (AccessDeniedHttpException $exception) {
-            return Responser::forbidden();
+            return Response::forbidden();
         });
 
         $this->renderable(function (AuthenticationException $exception) {
-            return Responser::unauthorized();
+            return Response::unauthorized();
         });
 
         $this->renderable(function (ModelNotFoundException $exception) {
-            return Responser::notFound();
+            return Response::notFound();
         });
 
         $this->renderable(function (NotFoundHttpException $exception) {
-            return Responser::notFound();
+            return Response::notFound();
         });
 
         $this->renderable(function (MethodNotAllowedHttpException $exception) {
-            return Responser::notFound();
+            return Response::notFound();
         });
 
         $this->renderable(function (BadMethodCallException $exception) {
-            return Responser::error();
+            return Response::error();
         });
 
         $this->renderable(function (ValidationException $exception) {
-            return Responser::unprocessable(
+            return Response::unprocessable(
                 $exception->errors()
             );
         });
 
         $this->renderable(function (ConnectionException $exception) {
-            return Responser::error();
+            return Response::error();
         });
 
         $this->renderable(function (TooManyRequestsHttpException $exception) {
-            return Responser::tooManyRequests();
+            return Response::tooManyRequests();
         });
 
         $this->renderable(function (Exception $exception) {
-            return Responser::serverError();
+            return Response::serverError();
         });
     }
 
@@ -78,15 +79,14 @@ class Handler extends ExceptionHandler
      */
     protected function context(): array
     {
-        /** @var Request|null $request */
-        $request = app('request');
-        if ($request) {
+        /** @var Request $request */
+        if ($request = request()) {
             $data = [
                 'path'       => $request->path(),
                 'method'     => $request->method(),
                 'parameters' => $request->all(),
-                'headers'    => $request->header(),
-                'fired_at'   => now()->toString()
+                'fired_at'   => now()->toString(),
+                'headers'    => Arr::except($request->header(), 'Authorization'),
             ];
             return array_merge(['request' => json_encode($data, JSON_PRETTY_PRINT)], parent::context());
         }

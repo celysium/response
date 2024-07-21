@@ -1,5 +1,5 @@
 {
-    "name": "celysium/responser",
+    "name": "celysium/response",
     "description": "Library for universal json responses.",
     "keywords": [
         "Laravel",
@@ -8,7 +8,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Celysium\\Responser\\": "src/"
+            "Celysium\\Response\\": "src/"
         }
     },
     "authors": [
@@ -28,10 +28,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Celysium\\Responser\\ResponserServiceProvider"
+                "Celysium\\Response\\ResponseServiceProvider"
             ],
             "aliases": {
-                "Responser": "Celysium\\Responser\\Facades\\Responser"
+                "Response": "Celysium\\Response\\Facades\\Response"
             }
         }
     },

@@ -1,20 +1,20 @@
 <?php
 
-namespace Celysium\Responser;
+namespace Celysium\Response;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Response as BaseResponse;
 use Symfony\Component\HttpFoundation\Response as ResponseClass;
 
-class Responser
+class Response
 {
     public static function json($data = [], $messages = [], int $statusCode = ResponseClass::HTTP_OK, $meta = []): JsonResponse
     {
-        return Response::json(
+        return BaseResponse::json(
             [
                 'messages' => $messages,
                 'data' => $data,
@@ -29,7 +29,7 @@ class Responser
         if (count($messages) == 0) {
             $messages[] = [
                 'type' => 'success',
-                'text' => __('responser::response.success')
+                'text' => __('response::response.success')
             ];
         }
 
@@ -43,10 +43,10 @@ class Responser
 
     public static function info($data, $messages = [], int $statusCode = ResponseClass::HTTP_OK, $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'info',
-                'text' => __('responser::response.info')
+                'text' => __('response::response.info')
             ];
         }
 
@@ -60,10 +60,10 @@ class Responser
 
     public static function created($data, $messages = [], $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'success',
-                'text' => __('responser::response.created')
+                'text' => __('response::response.created')
             ];
         }
 
@@ -77,10 +77,10 @@ class Responser
 
     public static function deleted($data = [], $messages = [], $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
-                'type' => 'info',
-                'text' => __('responser::response.deleted')
+                'type' => 'success',
+                'text' => __('response::response.deleted')
             ];
         }
 
@@ -94,10 +94,10 @@ class Responser
 
     public static function error($data = [], $messages = [], int $statusCode = ResponseClass::HTTP_BAD_REQUEST, $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'error',
-                'text' => __('responser::response.error')
+                'text' => __('response::response.error')
             ];
         }
 
@@ -111,10 +111,10 @@ class Responser
 
     public static function serverError($data = [], $messages = [], $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'error',
-                'text' => __('responser::response.serverError')
+                'text' => __('response::response.serverError')
             ];
         }
 
@@ -128,13 +128,13 @@ class Responser
 
     public static function notFound($data = [], $messages = [], $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'error',
-                'text' => __('responser::response.notFound')
+                'text' => __('response::response.notFound')
             ];
         }
-        
+
         return static::json(
             $data,
             $messages,
@@ -145,10 +145,10 @@ class Responser
 
     public static function unauthorized($data = [], $messages = [], $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'error',
-                'text' => __('responser::response.unauthorized')
+                'text' => __('response::response.unauthorized')
             ];
         }
         return static::json(
@@ -161,10 +161,10 @@ class Responser
 
     public static function forbidden($data = [], $messages = [], $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'error',
-                'text' => __('responser::response.forbidden')
+                'text' => __('response::response.forbidden')
             ];
         }
         return static::json(
@@ -177,10 +177,10 @@ class Responser
 
     public static function unprocessable($data = [], $messages = [], $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'error',
-                'text' => __('responser::response.unprocessable')
+                'text' => __('response::response.unprocessable')
             ];
         }
 
@@ -194,10 +194,10 @@ class Responser
 
     public static function paymentRequired($data = [], $messages = [], $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'error',
-                'text' => __('responser::response.paymentRequired')
+                'text' => __('response::response.paymentRequired')
             ];
         }
         return static::json(
@@ -210,10 +210,10 @@ class Responser
 
     public static function tooManyRequests($data = [], $messages = [], $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'error',
-                'text' => __('responser::response.tooManyRequests')
+                'text' => __('response::response.tooManyRequests')
             ];
         }
         return static::json(
@@ -226,10 +226,10 @@ class Responser
 
     public static function methodNotAllowed($data = [], $messages = [], $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'error',
-                'text' => __('responser::response.methodNotAllowed')
+                'text' => __('response::response.methodNotAllowed')
             ];
         }
 
@@ -243,10 +243,10 @@ class Responser
 
     public static function methodNotAcceptable($data = [], $messages = [], $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'error',
-                'text' => __('responser::response.notAcceptable')
+                'text' => __('response::response.notAcceptable')
             ];
         }
         return static::json(
@@ -259,10 +259,10 @@ class Responser
 
     public static function proxyAuthenticationRequired($data = [], $messages = [], $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'error',
-                'text' => __('responser::response.proxyAuthenticationRequired')
+                'text' => __('response::response.proxyAuthenticationRequired')
             ];
         }
         return static::json(
@@ -275,10 +275,10 @@ class Responser
 
     public static function requestTimeout($data = [], $messages = [], $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'error',
-                'text' => __('responser::response.requestTimeout')
+                'text' => __('response::response.requestTimeout')
             ];
         }
         return static::json(
@@ -291,10 +291,10 @@ class Responser
 
     public static function conflict($data = [], $messages = [], $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'error',
-                'text' => __('responser::response.conflict')
+                'text' => __('response::response.conflict')
             ];
         }
         return static::json(
@@ -307,10 +307,10 @@ class Responser
 
     public static function gone($data = [], $messages = [], $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'error',
-                'text' => __('responser::response.gone')
+                'text' => __('response::response.gone')
             ];
         }
         return static::json(
@@ -323,10 +323,10 @@ class Responser
 
     public static function lengthRequired($data = [], $messages = [], $meta = []): JsonResponse
     {
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'error',
-                'text' => __('responser::response.lengthRequired')
+                'text' => __('response::response.lengthRequired')
             ];
         }
         return static::json(
@@ -344,33 +344,26 @@ class Responser
             $data = $data->toArray();
         }
         elseif ($data instanceof ResourceCollection) {
-            $meta = static::simpleMeta($data->resource->toArray());
+            $meta = static::getMeta($data->resource->toArray());
             $data = $data->collection;
         }
         elseif ($data instanceof LengthAwarePaginator) {
-            $meta = static::simpleMeta($data->toArray());
+            $meta = static::getMeta($data->toArray());
             $data = $data->items();
         }
 
-        if (count($messages) == 0) {
+        if (empty($messages)) {
             $messages[] = [
                 'type' => 'info',
-                'text' => __('responser::response.info')
+                'text' => __('response::response.info')
             ];
         }
 
         return static::json($data, $messages, $statusCode, $meta);
     }
 
-    public static function simpleMeta(array $meta): array
+    public static function getMeta(array $meta): array
     {
-        return Arr::only($meta, [
-            'current_page',
-            'last_page',
-            'per_page',
-            'from',
-            'to',
-            'total',
-        ]);
+        return Arr::only($meta, config('response.meta'));
     }
 }
