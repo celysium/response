@@ -12,354 +12,181 @@ use Symfony\Component\HttpFoundation\Response as ResponseClass;
 
 class Response
 {
-    public static function json($data = [], $messages = [], int $statusCode = ResponseClass::HTTP_OK, $meta = []): JsonResponse
+    public static function json(mixed $data, string $type, string $message, int $statusCode = ResponseClass::HTTP_OK, array $additional = []): JsonResponse
     {
         return BaseResponse::json(
-            [
-                'messages' => $messages,
-                'data' => $data,
-                'meta' => $meta,
-            ],
+            array_merge([
+                'type'    => $type,
+                'message' => $message,
+                'data'    => $data,
+            ], $additional),
             $statusCode
         );
     }
 
-    public static function success($data = [], $messages = [], int $statusCode = ResponseClass::HTTP_OK, $meta = []): JsonResponse
+    public static function success($data = [], string $type = 'success', string $message = null, int $statusCode = ResponseClass::HTTP_OK, array $additional = []): JsonResponse
     {
-        if (count($messages) == 0) {
-            $messages[] = [
-                'type' => 'success',
-                'text' => __('response::response.success')
-            ];
-        }
-
         return static::json(
             $data,
-            $messages,
+            $type,
+            $message ?? __('response::response.success'),
             $statusCode,
-            $meta
+            $additional
         );
     }
 
-    public static function info($data, $messages = [], int $statusCode = ResponseClass::HTTP_OK, $meta = []): JsonResponse
+    public static function info($data, string $type = 'info', string $message = null, int $statusCode = ResponseClass::HTTP_OK, array $additional = []): JsonResponse
     {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'info',
-                'text' => __('response::response.info')
-            ];
-        }
-
         return static::json(
             $data,
-            $messages,
+            $type,
+            $message ?? __('response::response.info'),
             $statusCode,
-            $meta
+            $additional
         );
     }
 
-    public static function created($data, $messages = [], $meta = []): JsonResponse
+    public static function created($data, string $type = 'success', string $message = null, array $additional = []): JsonResponse
     {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'success',
-                'text' => __('response::response.created')
-            ];
-        }
-
         return static::json(
             $data,
-            $messages,
+            $type,
+            $message ?? __('response::response.created'),
             ResponseClass::HTTP_CREATED,
-            $meta
+            $additional
         );
     }
 
-    public static function deleted($data = [], $messages = [], $meta = []): JsonResponse
+    public static function deleted($data = [], string $type = 'success', string $message = null, array $additional = []): JsonResponse
     {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'success',
-                'text' => __('response::response.deleted')
-            ];
-        }
-
         return static::success(
             $data,
-            $messages,
+            $type,
+            $message ?? __('response::response.deleted'),
             ResponseClass::HTTP_OK,
-            $meta
+            $additional
         );
     }
 
-    public static function error($data = [], $messages = [], int $statusCode = ResponseClass::HTTP_BAD_REQUEST, $meta = []): JsonResponse
+    public static function badRequest($data = [], string $type = 'error', string $message = null, array $additional = []): JsonResponse
     {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'error',
-                'text' => __('response::response.error')
-            ];
-        }
-
         return static::json(
             $data,
-            $messages,
-            $statusCode,
-            $meta
+            $type,
+            $message ?? __('response::response.badRequest'),
+            ResponseClass::HTTP_BAD_REQUEST,
+            $additional
         );
     }
 
-    public static function serverError($data = [], $messages = [], $meta = []): JsonResponse
+    public static function serverError($data = [], string $type = 'error', string $message = null, array $additional = []): JsonResponse
     {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'error',
-                'text' => __('response::response.serverError')
-            ];
-        }
-
         return static::json(
             $data,
-            $messages,
+            $type,
+            $message ?? __('response::response.serverError'),
             ResponseClass::HTTP_INTERNAL_SERVER_ERROR,
-            $meta
+            $additional
         );
     }
 
-    public static function notFound($data = [], $messages = [], $meta = []): JsonResponse
+    public static function notFound($data = [], string $type = 'error', string $message = null, array $additional = []): JsonResponse
     {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'error',
-                'text' => __('response::response.notFound')
-            ];
-        }
-
         return static::json(
             $data,
-            $messages,
+            $type,
+            $message ?? __('response::response.notFound'),
             ResponseClass::HTTP_NOT_FOUND,
-            $meta
+            $additional
         );
     }
 
-    public static function unauthorized($data = [], $messages = [], $meta = []): JsonResponse
+    public static function unauthorized($data = [], string $type = 'error', string $message = null, array $additional = []): JsonResponse
     {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'error',
-                'text' => __('response::response.unauthorized')
-            ];
-        }
         return static::json(
             $data,
-            $messages,
+            $type,
+            $message ?? __('response::response.unauthorized'),
             ResponseClass::HTTP_UNAUTHORIZED,
-            $meta
+            $additional
         );
     }
 
-    public static function forbidden($data = [], $messages = [], $meta = []): JsonResponse
+    public static function forbidden($data = [], string $type = 'error', string $message = null, array $additional = []): JsonResponse
     {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'error',
-                'text' => __('response::response.forbidden')
-            ];
-        }
         return static::json(
             $data,
-            $messages,
+            $type,
+            $message ?? __('response::response.forbidden'),
             ResponseClass::HTTP_FORBIDDEN,
-            $meta
+            $additional
         );
     }
 
-    public static function unprocessable($data = [], $messages = [], $meta = []): JsonResponse
+    public static function unprocessable($data = [], string $type = 'error', string $message = null, array $additional = []): JsonResponse
     {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'error',
-                'text' => __('response::response.unprocessable')
-            ];
-        }
-
         return static::json(
             $data,
-            $messages,
+            $type,
+            $message ?? __('response::response.unprocessable'),
             ResponseClass::HTTP_UNPROCESSABLE_ENTITY,
-            $meta
+            $additional
         );
     }
 
-    public static function paymentRequired($data = [], $messages = [], $meta = []): JsonResponse
+    public static function tooManyRequests($data = [], string $type = 'error', string $message = null, array $additional = []): JsonResponse
     {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'error',
-                'text' => __('response::response.paymentRequired')
-            ];
-        }
         return static::json(
             $data,
-            $messages,
-            ResponseClass::HTTP_PAYMENT_REQUIRED,
-            $meta
-        );
-    }
-
-    public static function tooManyRequests($data = [], $messages = [], $meta = []): JsonResponse
-    {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'error',
-                'text' => __('response::response.tooManyRequests')
-            ];
-        }
-        return static::json(
-            $data,
-            $messages,
+            $type,
+            $message ?? __('response::response.tooManyRequests'),
             ResponseClass::HTTP_TOO_MANY_REQUESTS,
-            $meta
+            $additional
         );
     }
 
-    public static function methodNotAllowed($data = [], $messages = [], $meta = []): JsonResponse
+    public static function methodNotAllowed($data = [], string $type = 'error', string $message = null, array $additional = []): JsonResponse
     {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'error',
-                'text' => __('response::response.methodNotAllowed')
-            ];
-        }
-
         return static::json(
             $data,
-            $messages,
+            $type,
+            $message ?? __('response::response.methodNotAllowed'),
             ResponseClass::HTTP_METHOD_NOT_ALLOWED,
-            $meta
+            $additional
         );
     }
 
-    public static function methodNotAcceptable($data = [], $messages = [], $meta = []): JsonResponse
+    public static function error($data = [], string $type = 'error', string $message = null, int $statusCode = ResponseClass::HTTP_INTERNAL_SERVER_ERROR, array $additional = []): JsonResponse
     {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'error',
-                'text' => __('response::response.notAcceptable')
-            ];
-        }
         return static::json(
             $data,
-            $messages,
-            ResponseClass::HTTP_NOT_ACCEPTABLE,
-            $meta
+            $type,
+            $message,
+            $statusCode,
+            $additional
         );
     }
 
-    public static function proxyAuthenticationRequired($data = [], $messages = [], $meta = []): JsonResponse
-    {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'error',
-                'text' => __('response::response.proxyAuthenticationRequired')
-            ];
-        }
-        return static::json(
-            $data,
-            $messages,
-            ResponseClass::HTTP_PROXY_AUTHENTICATION_REQUIRED,
-            $meta
-        );
-    }
-
-    public static function requestTimeout($data = [], $messages = [], $meta = []): JsonResponse
-    {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'error',
-                'text' => __('response::response.requestTimeout')
-            ];
-        }
-        return static::json(
-            $data,
-            $messages,
-            ResponseClass::HTTP_REQUEST_TIMEOUT,
-            $meta
-        );
-    }
-
-    public static function conflict($data = [], $messages = [], $meta = []): JsonResponse
-    {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'error',
-                'text' => __('response::response.conflict')
-            ];
-        }
-        return static::json(
-            $data,
-            $messages,
-            ResponseClass::HTTP_CONFLICT,
-            $meta
-        );
-    }
-
-    public static function gone($data = [], $messages = [], $meta = []): JsonResponse
-    {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'error',
-                'text' => __('response::response.gone')
-            ];
-        }
-        return static::json(
-            $data,
-            $messages,
-            ResponseClass::HTTP_GONE,
-            $meta
-        );
-    }
-
-    public static function lengthRequired($data = [], $messages = [], $meta = []): JsonResponse
-    {
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'error',
-                'text' => __('response::response.lengthRequired')
-            ];
-        }
-        return static::json(
-            $data,
-            $messages,
-            ResponseClass::HTTP_LENGTH_REQUIRED,
-            $meta
-        );
-    }
-
-    public static function collection(LengthAwarePaginator|Collection|ResourceCollection|array $data, $messages = [], int $statusCode = ResponseClass::HTTP_OK): JsonResponse
+    public static function collection(LengthAwarePaginator|Collection|ResourceCollection|array $data, string $type = 'info', string $message = null, int $statusCode = ResponseClass::HTTP_OK, array $additional = []): JsonResponse
     {
         $meta = [];
-        if($data instanceof Collection) {
+        if ($data instanceof Collection) {
             $data = $data->toArray();
-        }
-        elseif ($data instanceof ResourceCollection) {
+        } elseif ($data instanceof ResourceCollection) {
             $meta = static::getMeta($data->resource->toArray());
             $data = $data->collection;
-        }
-        elseif ($data instanceof LengthAwarePaginator) {
+        } elseif ($data instanceof LengthAwarePaginator) {
             $meta = static::getMeta($data->toArray());
             $data = $data->items();
         }
 
-        if (empty($messages)) {
-            $messages[] = [
-                'type' => 'info',
-                'text' => __('response::response.info')
-            ];
-        }
-
-        return static::json($data, $messages, $statusCode, $meta);
+        return static::json(
+            $data,
+            $type,
+            $message ?? __('response::response.info'),
+            $statusCode,
+            array_merge($additional, ['meta' => $meta])
+        );
     }
 
     public static function getMeta(array $meta): array

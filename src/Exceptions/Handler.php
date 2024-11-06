@@ -46,21 +46,19 @@ class Handler extends ExceptionHandler
         });
 
         $this->renderable(function (MethodNotAllowedHttpException $exception) {
-            return Response::notFound();
+            return Response::methodNotAllowed();
         });
 
         $this->renderable(function (BadMethodCallException $exception) {
-            return Response::error();
+            return Response::badRequest();
         });
 
         $this->renderable(function (ValidationException $exception) {
-            return Response::unprocessable(
-                $exception->errors()
-            );
+            return Response::unprocessable($exception->errors());
         });
 
         $this->renderable(function (ConnectionException $exception) {
-            return Response::error();
+            return Response::badRequest();
         });
 
         $this->renderable(function (TooManyRequestsHttpException $exception) {
@@ -88,7 +86,7 @@ class Handler extends ExceptionHandler
                 'fired_at'   => now()->toString(),
                 'headers'    => Arr::except($request->header(), 'Authorization'),
             ];
-            return array_merge(['request' => json_encode($data, JSON_PRETTY_PRINT)], parent::context());
+            return array_merge(['request' => json_encode($data)], parent::context());
         }
         return parent::context();
     }
