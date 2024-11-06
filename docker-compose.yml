@@ -1,0 +1,12 @@
+services:
+
+    # PHP Service
+    response:
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        container_name: response
+        restart: unless-stopped
+        tty: true
+        volumes:
+            - ./:/var/www
