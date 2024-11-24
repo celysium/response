@@ -4,7 +4,6 @@ namespace Celysium\Response\Exceptions;
 
 use Carbon\Exceptions\BadMethodCallException;
 use Celysium\Response\Response;
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -17,57 +16,35 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
-    public function register()
+
+    /**
+     * @param $request
+     * @param Throwable $e
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws Throwable
+     */
+    public function render($request, Throwable $e) : \Symfony\Component\HttpFoundation\Response
     {
-        if (!env('RESPONSE_EXCEPTION_HANDLER')) {
-            return;
+        if (env('APP_DEBUG')) {
+            return parent::render($request, $e);
         }
-        $this->renderable(function (AuthorizationException $exception) {
-            return Response::forbidden();
-        });
-
-        $this->renderable(function (AccessDeniedHttpException $exception) {
-            return Response::forbidden();
-        });
-
-        $this->renderable(function (AuthenticationException $exception) {
-            return Response::unauthorized();
-        });
-
-        $this->renderable(function (ModelNotFoundException $exception) {
-            return Response::notFound();
-        });
-
-        $this->renderable(function (NotFoundHttpException $exception) {
-            return Response::notFound();
-        });
-
-        $this->renderable(function (MethodNotAllowedHttpException $exception) {
-            return Response::methodNotAllowed();
-        });
-
-        $this->renderable(function (BadMethodCallException $exception) {
-            return Response::badRequest();
-        });
-
-        $this->renderable(function (ValidationException $exception) {
-            return Response::unprocessable($exception->errors());
-        });
-
-        $this->renderable(function (ConnectionException $exception) {
-            return Response::badRequest();
-        });
-
-        $this->renderable(function (TooManyRequestsHttpException $exception) {
-            return Response::tooManyRequests();
-        });
-
-        $this->renderable(function (Exception $exception) {
-            return Response::serverError();
-        });
+        return match (get_class($e)) {
+            AuthorizationException::class,
+            AccessDeniedHttpException::class => Response::forbidden(),
+            ValidationException::class => Response::unprocessable($e->errors()),
+            AuthenticationException::class => Response::unauthorized(),
+            ModelNotFoundException::class,
+            NotFoundHttpException::class => Response::notFound(),
+            MethodNotAllowedHttpException::class => Response::methodNotAllowed(),
+            BadMethodCallException::class,
+            ConnectionException::class => Response::badRequest(),
+            TooManyRequestsHttpException::class => Response::tooManyRequests(),
+            default => Response::serverError()
+        };
     }
 
     /**
@@ -79,14 +56,13 @@ class Handler extends ExceptionHandler
     {
         /** @var Request $request */
         if ($request = request()) {
-            $data = [
+            $meta['request'] = json_encode([
                 'path'       => $request->path(),
                 'method'     => $request->method(),
                 'parameters' => $request->all(),
-                'fired_at'   => now()->toString(),
-                'headers'    => Arr::except($request->header(), 'Authorization'),
-            ];
-            return array_merge(['request' => json_encode($data)], parent::context());
+                'headers'    => Arr::except($request->headers->all(), 'Authorization'),
+            ]);
+            return array_merge($meta, parent::context());
         }
         return parent::context();
     }
