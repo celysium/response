@@ -32,6 +32,9 @@ class Handler extends ExceptionHandler
         if (env('APP_DEBUG')) {
             return parent::render($request, $e);
         }
+        if (!$request->isJson()) {
+            return parent::render($request, $e);
+        }
         return match (get_class($e)) {
             AuthorizationException::class,
             AccessDeniedHttpException::class => Response::forbidden(),
