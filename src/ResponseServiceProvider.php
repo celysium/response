@@ -15,7 +15,9 @@ class ResponseServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/../config/response.php' => config_path('response.php'),
-        ], 'response-config');
+            __DIR__ . '/../lang/en/response.php' => base_path('lang/en/response.php'),
+            __DIR__ . '/../lang/fa/response.php' => base_path('lang/fa/response.php'),
+        ], 'response');
 
 
         $this->mergeConfigFrom(
