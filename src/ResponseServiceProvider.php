@@ -10,9 +10,6 @@ class ResponseServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'response');
-
-
         $this->publishes([
             __DIR__ . '/../config/response.php' => config_path('response.php'),
             __DIR__ . '/../lang/en/response.php' => base_path('lang/en/response.php'),

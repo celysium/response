@@ -29,7 +29,7 @@ class Response
         return static::json(
             $data,
             $type,
-            $message ?? __('response::response.success'),
+            $message ?? __('response.success'),
             $statusCode,
             $additional
         );
@@ -40,7 +40,7 @@ class Response
         return static::json(
             $data,
             $type,
-            $message ?? __('response::response.info'),
+            $message ?? __('response.info'),
             $statusCode,
             $additional
         );
@@ -51,7 +51,7 @@ class Response
         return static::json(
             $data,
             $type,
-            $message ?? __('response::response.created'),
+            $message ?? __('response.created'),
             ResponseClass::HTTP_CREATED,
             $additional
         );
@@ -62,7 +62,7 @@ class Response
         return static::success(
             $data,
             $type,
-            $message ?? __('response::response.deleted'),
+            $message ?? __('response.deleted'),
             ResponseClass::HTTP_OK,
             $additional
         );
@@ -73,7 +73,7 @@ class Response
         return static::json(
             $data,
             $type,
-            $message ?? __('response::response.badRequest'),
+            $message ?? __('response.badRequest'),
             ResponseClass::HTTP_BAD_REQUEST,
             $additional
         );
@@ -84,7 +84,7 @@ class Response
         return static::json(
             $data,
             $type,
-            $message ?? __('response::response.serverError'),
+            $message ?? __('response.serverError'),
             ResponseClass::HTTP_INTERNAL_SERVER_ERROR,
             $additional
         );
@@ -95,7 +95,7 @@ class Response
         return static::json(
             $data,
             $type,
-            $message ?? __('response::response.notFound'),
+            $message ?? __('response.notFound'),
             ResponseClass::HTTP_NOT_FOUND,
             $additional
         );
@@ -106,7 +106,7 @@ class Response
         return static::json(
             $data,
             $type,
-            $message ?? __('response::response.unauthorized'),
+            $message ?? __('response.unauthorized'),
             ResponseClass::HTTP_UNAUTHORIZED,
             $additional
         );
@@ -117,7 +117,7 @@ class Response
         return static::json(
             $data,
             $type,
-            $message ?? __('response::response.forbidden'),
+            $message ?? __('response.forbidden'),
             ResponseClass::HTTP_FORBIDDEN,
             $additional
         );
@@ -128,7 +128,7 @@ class Response
         return static::json(
             $data,
             $type,
-            $message ?? __('response::response.unprocessable'),
+            $message ?? __('response.unprocessable'),
             ResponseClass::HTTP_UNPROCESSABLE_ENTITY,
             $additional
         );
@@ -139,7 +139,7 @@ class Response
         return static::json(
             $data,
             $type,
-            $message ?? __('response::response.tooManyRequests'),
+            $message ?? __('response.tooManyRequests'),
             ResponseClass::HTTP_TOO_MANY_REQUESTS,
             $additional
         );
@@ -150,7 +150,7 @@ class Response
         return static::json(
             $data,
             $type,
-            $message ?? __('response::response.methodNotAllowed'),
+            $message ?? __('response.methodNotAllowed'),
             ResponseClass::HTTP_METHOD_NOT_ALLOWED,
             $additional
         );
@@ -183,7 +183,7 @@ class Response
         return static::json(
             $data,
             $type,
-            $message ?? __('response::response.info'),
+            $message ?? __('response.info'),
             $statusCode,
             array_merge($additional, ['meta' => $meta])
         );
